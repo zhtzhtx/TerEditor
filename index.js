@@ -41,11 +41,11 @@ class TerEditor {
     this.$el.innerHTML = this.spacers;
     this.startIndex = startOffset + text.length;
     this.endIndex = this.startIndex;
-    const range = document.createRange();
-    range.setStart(this.$el.childNodes[0], this.endIndex);
-    range.setEnd(this.$el.childNodes[0], this.endIndex);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
+    // const range = document.createRange();
+    // range.setStart(this.$el.childNodes[0], this.endIndex);
+    // range.setEnd(this.$el.childNodes[0], this.endIndex);
+    // window.getSelection().removeAllRanges();
+    // window.getSelection().addRange(range);
   }
   compositionend(e) {
     let text = e.data;
