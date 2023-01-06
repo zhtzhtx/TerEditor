@@ -1,3 +1,5 @@
+import Operation from './operation'
+
 export class InsertTextOperation extends Operation {
   constructor(spacers, insertIndex) {
     super();
@@ -18,3 +20,4 @@ export class InsertTextOperation extends Operation {
     return this._insertIndex;
   }
 }
+export default InsertTextOperation

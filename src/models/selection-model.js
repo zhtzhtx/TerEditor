@@ -1,4 +1,10 @@
+import { debounce } from "../utils/debounce";
+
 export class SelectionModel {
+  static EVENT_TYPE = {
+    SELECTION_CHANGE: 'selection-change'
+  }
+
   constructor() {
     this._selection = { anchor: 0, focus: 0 };
   }
@@ -25,6 +31,7 @@ export class SelectionModel {
   isBackward () {
     return this._selection && this._selection.anchor > this._selection.focus;
   }
+
 }
 
 export default SelectionModel

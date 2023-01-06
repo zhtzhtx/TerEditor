@@ -2,19 +2,30 @@
   "name": "ter-editor",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack serve --open"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zhtzhtx/TerEditor.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "hanting",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/zhtzhtx/TerEditor/issues"
   },
-  "homepage": "https://github.com/zhtzhtx/TerEditor#readme"
+  "homepage": "https://github.com/zhtzhtx/TerEditor#readme",
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "babel-loader": "^9.1.2",
+    "css-loader": "^6.7.3",
+    "html-webpack-plugin": "^5.5.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1"
+  }
 }
