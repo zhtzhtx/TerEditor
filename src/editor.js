@@ -64,6 +64,7 @@ export class TerEditor {
     }
     this.apply(new InsertTextOperation(text, startIndex));
     startIndex += text.length;
+    console.log(selection,text,text.length)
     this.setSelection(startIndex);
   }
 

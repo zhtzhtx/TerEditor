@@ -1,15 +1,12 @@
 import { debounce } from "../utils/debounce";
+import { EVENT_TYPE } from '../const'
 
 export class TextModel {
-  static EVENT_TYPE = {
-    TEXT_CHANGE: "text-change",
-  };
-
   constructor(spacers) {
     this._spacers = spacers || "";
     this._events = {};
     this._textChangeEmit = debounce(() => {
-      this.emit(TextModel.EVENT_TYPE.TEXT_CHANGE);
+      this.emit(EVENT_TYPE.TEXT_CHANGE);
     });
   }
 

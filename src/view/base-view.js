@@ -1,5 +1,5 @@
-import TextModel from "../models/text-model";
 import { debounce } from "../utils/debounce";
+import { EVENT_TYPE } from "../const";
 
 export class BaseView {
   constructor(textModel, selectionModel, viewContainer) {
@@ -7,13 +7,14 @@ export class BaseView {
     this._selectionModel = selectionModel;
     this._viewContainer = viewContainer;
     this._viewContainer.setAttribute("contenteditable", "true");
+    this._events = {};
     this.addListeners();
   }
   addListeners() {
     // 模型事件
     this._renderBinder = this.render.bind(this);
     // 模型事件触发已经节流，此处不需节流
-    this._textModel.on(TextModel.EVENT_TYPE.TEXT_CHANGE, this._renderBinder);
+    this._textModel.on(EVENT_TYPE.TEXT_CHANGE, this._renderBinder);
     // dom 选区事件
     this._domSelectionChangeHandlerBinder = debounce(
       this.domSelectionChangeHandler.bind(this),
@@ -25,8 +26,8 @@ export class BaseView {
     );
   }
   render() {
-    this._viewContainer.innerHTML = this._textModel.getSpacer();
-    this.updateDomSelection()
+    this._viewContainer.innerHTML =this._textModel.getSpacer();
+    this.updateDomSelection();
   }
   /** 鼠标或键盘导致的原生 dom 选区变化，同步到选区模型 */
   domSelectionChangeHandler(e) {
@@ -40,7 +41,7 @@ export class BaseView {
       anchor = anchorOffset;
       focus = anchorOffset;
     }
-    this._selectionModel.setSelection({ anchor, focus });
+    this.emit(EVENT_TYPE.SELECTION_CHANGE, { anchor, focus });
   }
   /** 更新 dom 真实选区 */
   updateDomSelection() {
@@ -73,9 +74,21 @@ export class BaseView {
   }
   customPointToDomPoint(customPoint) {
     return {
-      domNode: this._viewContainer.childNodes[0],
+      domNode: this._viewContainer.childNodes[0] || this._viewContainer,
       domOffset: customPoint,
     };
+  }
+  // TODO: 发布订阅，先手写，后面会改
+  on(event, fn) {
+    if (!this._events[event]) {
+      this._events[event] = [];
+    }
+    this._events[event].push(fn);
+  }
+  emit(event, data) {
+    this._events[event].forEach((fn) => {
+      fn(data);
+    });
   }
 }
 
