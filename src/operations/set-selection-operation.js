@@ -5,6 +5,12 @@ export class SetSelectionOperation extends Operation {
     super();
     this._selection = selection;
   }
+  /** 合并两个选区op */
+  static merge (firstOp, secondOp) {
+    const newSelection = new SetSelectionOperation(secondOp.getSelection());
+    newSelection.setOldSelection(firstOp.getOldSelection());
+    return newSelection;
+  }
   apply(editor) {
     this.setOldSelection(editor.getSelectionModel().getSelection());
     editor.getSelectionModel().setSelection(this._selection);

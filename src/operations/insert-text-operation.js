@@ -1,4 +1,5 @@
 import Operation from './operation'
+import RemoveTextOperation from "./remove-text-operation";
 
 export class InsertTextOperation extends Operation {
   constructor(spacers, insertIndex) {
@@ -10,7 +11,9 @@ export class InsertTextOperation extends Operation {
     editor.getTextModel().insert(this._insertIndex, this._spacers);
   }
 
-  inverse () {}
+  inverse () {
+    return new RemoveTextOperation(this._insertIndex, this._insertIndex + this._spacers.length);
+  }
 
   getSapcers () {
     return this._spacers;

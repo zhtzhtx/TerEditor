@@ -1,4 +1,5 @@
 import TerEditor from "./src/editor.js";
-import './src/styles/index.css'
+import { withUndoRedo } from "./src/plugins/undo-redo";
+import "./src/styles/index.css";
 
-new TerEditor('#root')
+withUndoRedo(new TerEditor("#root"));
