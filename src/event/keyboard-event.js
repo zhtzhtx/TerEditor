@@ -1,10 +1,12 @@
 import BaseEventHandler from "./base-event";
+import hotkeys from "./hotkeys";
 
 export class KeyboardEventHandler extends BaseEventHandler{
   addListeners() {
     this._target.addEventListener("beforeinput", this._beforeInputHandler.bind(this));
     // 插入输入的中文
     this._target.addEventListener("compositionend", this._insertText.bind(this));
+    this._target.addEventListener('keydown', this._keydownHandler.bind(this));
   }
   _beforeInputHandler(e) {
     if (e.inputType === 'insertCompositionText' || e.inputType === 'deleteCompositionText') {
@@ -23,6 +25,22 @@ export class KeyboardEventHandler extends BaseEventHandler{
   }
   _deleteContentBackward(e) {
     this._editor.deleteTextAtCursor();
+  }
+  _keydownHandler (e) {
+    if (hotkeys.isRedo(e)) {
+      e.preventDefault();
+      if (this._editor['redo'] && typeof this._editor['redo'] === 'function') {
+        this._editor['redo']();
+      }
+      return;
+    }
+    if (hotkeys.isUndo(e)) {
+      e.preventDefault();
+      if (this._editor['undo'] && typeof this._editor['undo'] === 'function') {
+        this._editor['undo']();
+      }
+      return;
+    }
   }
 }
 
