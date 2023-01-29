@@ -56,6 +56,7 @@ export class ViewEventHandler extends BaseEventHandler {
   }
   _compositionEndHandler(e) {
     this.isComposing = false;
+    this._insertText(e)
   }
 }
 
