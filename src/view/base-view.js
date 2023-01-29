@@ -26,12 +26,36 @@ export class BaseView {
     );
   }
   render() {
-    this._viewContainer.innerHTML =this._textModel.getSpacer();
+    this._viewContainer.innerHTML = this._textModel.getSpacer();
     this.updateDomSelection();
   }
   /** 鼠标或键盘导致的原生 dom 选区变化，同步到选区模型 */
   domSelectionChangeHandler(e) {
-    const { anchorOffset, focusOffset } = window.getSelection();
+    const domSelection = window.getSelection();
+    let selection = null;
+    if (domSelection) {
+      selection = this.domSelToCustomSel(domSelection);
+    }
+    // this.showMarker(domSelection);
+    this.emit(EVENT_TYPE.SELECTION_CHANGE, selection);
+  }
+  /** 将 Dom 真实选区转换成选区模型 */
+  domSelToCustomSel(domSelection) {
+    // let selection = { anchor: 0, focus: 0 };
+    // if (domSelection.anchorNode) {
+    //   const anchorIndex = this.domPointToCustomPoint({
+    //     domNode: domSelection.anchorNode,
+    //     domOffset: domSelection.anchorOffset,
+    //   });
+    //   const focusIndex = domSelection.isCollapsed
+    //     ? anchorIndex
+    //     : this.domPointToCustomPoint({
+    //         domNode: domSelection.focusNode,
+    //         domOffset: domSelection.focusOffset,
+    //       });
+    //   selection = { anchor: anchorIndex, focus: focusIndex };
+    // }
+    const { anchorOffset, focusOffset } = domSelection;
     let anchor, focus;
     // 获取选中范围,如果光标没有选中则保持当前位置
     if (focusOffset !== anchorOffset) {
@@ -41,7 +65,7 @@ export class BaseView {
       anchor = anchorOffset;
       focus = anchorOffset;
     }
-    this.emit(EVENT_TYPE.SELECTION_CHANGE, { anchor, focus });
+    return {anchor, focus};
   }
   /** 更新 dom 真实选区 */
   updateDomSelection() {
@@ -52,6 +76,8 @@ export class BaseView {
       const range = this.customSelToDomSel(selectionFromModel);
       if (range) {
         domSelection.addRange(range);
+        // 立即调用showmarker，避免在marker之间输入时，marker触发延时导致闪烁的问题
+        // this.showMarker(domSelection);
       }
     }
   }
