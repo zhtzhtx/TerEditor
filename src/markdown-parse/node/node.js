@@ -1,3 +1,33 @@
+export const NodeType = {
+  Document: 'document',
+  BlockQuote: 'blockQuote',
+  List: 'list',
+  Item: 'item',
+  Paragraph: 'paragraph',
+  Head: 'head',
+  Table: 'table',
+  TableThead: 'tableThead',
+  TableTh: 'tableTh',
+  TableTbody: 'tableTbody',
+  TableTr: 'tableTr',
+  TableTd: 'tableTd',
+  Emph: 'emph',
+  Strong: 'strong',
+  Link: 'link',
+  Image: 'image',
+  CustomInline: 'customInline',
+  CustomBlock: 'customBlock',
+  CodeBlock: 'codeBlock',
+  HtmlBlock: 'htmlBlock',
+  ThematicBreak: 'thematicBreak',
+  Text: 'text',
+  Underline: 'underline',
+  Checkbox: 'checkbox',
+  Del: 'del',
+  Code: 'code',
+}
+
+
 export class MNode {
   type;
   parent = null;
@@ -13,9 +43,13 @@ export class MNode {
   blockMarkerAfter = ""; // 标识占位符(叶子块需要,目前只有代码块和标题需要，因为其他叶子快内部可以包含p标签)
   marker = ""; // 是否是文本标记符占位节点
   isShow = true; // 是否需要显示和隐藏（隐藏的话直接不创建dom节点，占位场景）
+
+
   constructor(sourceStart) {
     this.sourceStart = sourceStart;
   }
+
+
   unlink() {
     if (this.prev) {
       this.prev.next = this.next;
@@ -92,4 +126,22 @@ export class MNode {
   getStringContent () {
     return this.stringContent;
   }
+
+  /** 段落延续规则怕判断（当前节点块是否可包含跨行内容,即新的一行能否放入当前块，而不用新建节点） */
+  continue (currentLine, offset, colum) { 
+    return null;
+  }
+  /** 在节点解析关闭时运行。理解为node关闭回调钩子，关闭后需要处理的事务，如html替换掉\n、识别段首链接等 */
+  finalize(sourceEnd) {
+    this.open = false;
+    if (sourceEnd) {
+      this.sourceEnd = sourceEnd;
+    }
+  }
+
+  /** 是否能包含类型为 nodeType 的子块 */
+  canContain(mnode) {
+    return false;
+  }
 }
+export default MNode

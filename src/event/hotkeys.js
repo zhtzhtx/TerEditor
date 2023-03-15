@@ -8,6 +8,10 @@ class Hotkeys {
     return this.instance;
   }
 
+  isTab (e) {
+    return IS_KEYS['isTab'](e);
+  }
+
   isRedo(e) {
     return IS_KEYS["redo"](e);
   }
