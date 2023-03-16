@@ -1,4 +1,5 @@
 import { debounce } from "../utils/debounce";
+import markdown from "../markdown-parse"
 import { EVENT_TYPE } from "../const";
 
 export class BaseView {
@@ -26,7 +27,7 @@ export class BaseView {
     );
   }
   render() {
-    this._viewContainer.innerHTML = this._textModel.getSpacer();
+    this._viewContainer.innerHTML = markdown.md2html(this._textModel.getSpacer());
     this.updateDomSelection();
   }
   /** 鼠标或键盘导致的原生 dom 选区变化，同步到选区模型 */

@@ -35,12 +35,17 @@ export class KeyboardEventHandler extends BaseEventHandler {
         const data = e.dataTransfer;
         text = data.getData("text/plain");
         if (text) {
-          this.editor.insertTextAtCursor(text);
+          this._editor.insertTextAtCursor(text);
         }
         break;
     }
   }
   _keydownHandler(e) {
+    if (hotkeys.isTab(e)) {
+      e.preventDefault();
+      this._editor.insertTextAtCursor('\t');
+      return
+    }
     if (hotkeys.isRedo(e)) {
       e.preventDefault();
       if (this._editor["redo"] && typeof this._editor["redo"] === "function") {
