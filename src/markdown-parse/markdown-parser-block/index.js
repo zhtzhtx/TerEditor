@@ -156,6 +156,23 @@ class MarkdownParserBlock {
       lastChild = lastChild.lastChild;
     }
   }
+  _addLineText () {
+    let stringContent = this._tip.getStringContent() || '';
+    if (this._spaceInTab) { // 表示当前处于一个tab内部（一个tab 4个空格）
+      this._offset += 1; // 补齐一个tab的空格
+      // add space characters:
+      const charsToTab = 4 - (this._column % 4);
+      stringContent += " ".repeat(charsToTab);
+    }
+     if (this._tip.type === NodeType.Paragraph && this._tip.parent?.type === NodeType.Document) {
+       // TODO 普通段落标签保留整行内容，包括行首空格，并修改源码坐标映射（待优化）
+      stringContent += this._currentLine;
+      this._tip.sourceStart = this._sourceIndex;
+    } else {
+      stringContent += this._currentLine.slice(this._offset);
+    }
+    this._tip.setStringContent(stringContent);
+  }
 }
 
 export default MarkdownParserBlock;
