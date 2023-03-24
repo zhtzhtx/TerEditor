@@ -1,13 +1,15 @@
 class TerEditor {
   constructor(el) {
+    // 获取目标DOM
     this.$el = typeof el === "string" ? document.querySelector(el) : el;
     this.spacers = "";
     this.startIndex = 0;
     this.endIndex = 0;
-    this.isOnComposition = false;
     this._initEditor(this.$el);
   }
   _initEditor(el) {
+    // 修改 contenteditable
+    el.setAttribute("contenteditable", "true");
     // 监听输入英文
     el.addEventListener("beforeinput", (e) => {
       const inputType = e.inputType;
@@ -20,12 +22,8 @@ class TerEditor {
       this["compositionend"](e);
     });
   }
-  // 单字输入
   insertText(e) {
-    let text = e.data;
-    if (parseInt(text) === 9) {
-      text = "九";
-    }
+    const text = e.data;
     const { anchorOffset, focusOffset } = window.getSelection();
     let startOffset, endOffset;
     // 获取选中范围,如果光标没有选中则保持当前位置
@@ -36,9 +34,15 @@ class TerEditor {
       startOffset = anchorOffset;
       endOffset = anchorOffset;
     }
-    this.spacers =
-      this.spacers.slice(0, startOffset) + text + this.spacers.slice(endOffset);
+    // this.spacers 就应该修改为当前文本内容的开头至光标起点 + 输入内容 + 光标终点至文本内容的结尾
+    this.spacers = this.spacers.slice(0, startOffset) + text + this.spacers.slice(endOffset);
     this.$el.innerHTML = this.spacers;
+    /**
+     * 当文字输入完成时，光标会变成线状，同时光标应该在我们输入内容的末尾处，所以我们需要修改光标位置，
+     * 这时 startIndex 应该加上输入内容的长度，而 endIndex 和位置一样。然后我们可以通过 document.createRange
+     * 方法来创建一个新的光标位置，setStart 和 setEnd 方法来设置光标的起点和终点，然后先清空当前页面的
+     * 光标，再重新设置一个新的光标。
+    */
     this.startIndex = startOffset + text.length;
     this.endIndex = this.startIndex;
     const range = document.createRange();
@@ -47,17 +51,8 @@ class TerEditor {
     window.getSelection().removeAllRanges();
     window.getSelection().addRange(range);
   }
-  compositionend(e) {
-    let text = e.data;
-    const { anchorOffset, focusOffset } = window.getSelection();
-    this.spacers =
-      this.spacers.slice(0, anchorOffset - text.length) +
-      text +
-      this.spacers.slice(anchorOffset - text.length);
-      console.log(this.spacers)
-  }
-  // 删除
-  deleteContentBackward(e) {
+   // 删除
+   deleteContentBackward(e) {
     const { anchorOffset, focusOffset } = window.getSelection();
     let startOffset, endOffset;
     // 如果没有数据则保持光标不动
@@ -85,4 +80,16 @@ class TerEditor {
       window.getSelection().addRange(range);
     }
   }
+  // 控制中文输入
+  compositionend(e) {
+    let text = e.data;
+    // compositionend 事件中光标位置已经改变， anchorOffset 和 focusOffset 相同
+    const { anchorOffset } = window.getSelection();
+    // this.spacers 就应该修改为当前文本内容的开头index减去输入内容的长度 + 输入内容 + 剩余文本内容
+    this.spacers = this.spacers.slice(0, anchorOffset - text.length) + text + this.spacers.slice(anchorOffset - text.length);
+    this.startIndex = anchorOffset;
+    this.endIndex = anchorOffset;
+  }
 }
+
+export default TerEditor
