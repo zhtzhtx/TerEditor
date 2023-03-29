@@ -1,4 +1,6 @@
 import MarkdownParserBlock from "./markdown-parser-block";
+import MarkdownParserLine from "./markdown-parser-line";
+import MarkdownRender from "./markdown-render";
 import MTreeWalker from "./tree-walker";
 
 class Markdown {
@@ -17,13 +19,12 @@ class Markdown {
     return block;
   }
   md2html (md) {
-    return this.md2node(md);
+    return new MarkdownRender().render(this.md2node(md));
   }
   /** markdown 字符串转语法树 */
   md2node(md) {
-    // this._parseBlock(md)
-    console.log(this._parseBlock(md))
-    // return this._parseLine(this._parseBlock(md));
+    const html = this._parseLine(this._parseBlock(md));
+    return html
   }
 }
 

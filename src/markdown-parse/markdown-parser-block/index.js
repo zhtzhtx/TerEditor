@@ -95,7 +95,7 @@ class MarkdownParserBlock {
         }
         if (container.lastChild) {
           container = container.lastChild;
-          this.dealSpace_();
+          this._dealSpace();
         } else {
           break;
         }
@@ -113,13 +113,13 @@ class MarkdownParserBlock {
   }
   _fixOffsetAndColumn(offset, column, spaceInTab) {
     if (offset > -1) {
-      this.offset_ = offset;
+      this._offset = offset;
     }
     if (column > -1) {
-      this.column_ = column;
+      this._column = column;
     }
     if (spaceInTab > -1) {
-      this.spaceInTab_ = spaceInTab;
+      this._spaceInTab = spaceInTab;
     }
   }
   // 计算每行首位的空格数

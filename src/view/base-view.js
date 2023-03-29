@@ -27,8 +27,10 @@ export class BaseView {
     );
   }
   render() {
-    this._viewContainer.innerHTML = markdown.md2html(this._textModel.getSpacer());
-    this.updateDomSelection();
+    const html = markdown.md2html(this._textModel.getSpacer())
+    console.log(html)
+    this._viewContainer.innerHTML = html;
+    // this.updateDomSelection();
   }
   /** 鼠标或键盘导致的原生 dom 选区变化，同步到选区模型 */
   domSelectionChangeHandler(e) {
@@ -78,7 +80,7 @@ export class BaseView {
       if (range) {
         domSelection.addRange(range);
         // 立即调用showmarker，避免在marker之间输入时，marker触发延时导致闪烁的问题
-        // this.showMarker(domSelection);
+        this.showMarker(domSelection);
       }
     }
   }

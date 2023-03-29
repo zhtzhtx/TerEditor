@@ -1,4 +1,4 @@
-import { TextNode } from "../node";
+import { NodeType, TextNode } from "../node";
 
 class MarkdownParserLine {
   _block;
@@ -21,17 +21,18 @@ class MarkdownParserLine {
     }
     this._offset = 0;
     this._delimiter = null;
+    this._parseLine();
   }
   _parseLine () {
-    if (!this.line_) {
-      this.block_.appendChild(new TextNode(this.sourceStart_, ''));
+    if (!this._line) {
+      this._block.appendChild(new TextNode(this.sourceStart_, ''));
       return;
     }
     let char;
-    while (char = this.line_[this.offset_]) {
+    while (char = this._line[this._offset]) {
       switch (char) {
         default:
-          this.parseText_();
+          this._parseText();
           break;
       }
     }
