@@ -1,4 +1,5 @@
 import { NodeType, DocumentNode, HeadNode, ParagraphNode, TextNode } from '../node'
+import { escapeXml } from "../funs";
 
 export class HtmlGenerate {
   _createTag(tagName, attrs, selfClosing) {
@@ -34,7 +35,7 @@ export class HtmlGenerate {
   [NodeType.Text](buffer, mnode, close) {
     if (mnode.marker) {
       const attrs = [['class', `editor-marker hide`], ['m', mnode.marker]];
-      buffer += this._createTag('span', this._getSource(mnode, attrs));
+      buffer += this._createTag('span', this._getSource(mnode, attrs)) + escapeXml(mnode.text);
       buffer += this._createTag('/span');
     } else {
       buffer += mnode.text;

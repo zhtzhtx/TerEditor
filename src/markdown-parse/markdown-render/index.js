@@ -9,7 +9,6 @@ class MarkdownRender {
         const walker = new MTreeWalker(mnode);
         let buffer = '';
         let current;
-        console.log(walker)
         while (current = walker.next()) {
             if (htmlGenerate[current.mnode.type]) {
                 buffer = htmlGenerate[current.mnode.type](buffer, current.mnode, current.close) || '';

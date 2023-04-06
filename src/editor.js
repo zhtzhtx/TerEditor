@@ -88,6 +88,11 @@ export class TerEditor {
     );
   }
 
+  /** 取消选区 */
+  removeSelection () {
+    this.apply(new SetSelectionOperation(null));
+  }
+
   /** 在光标处往回删除一个字符，如果有选中，则删除整个选区 */
   deleteTextAtCursor() {
     let selection = this.$selectionModel.getSelection();

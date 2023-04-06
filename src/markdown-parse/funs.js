@@ -1,3 +1,28 @@
+function replaceUnsafeChar (str) {
+  switch (str) {
+    case "&":
+      return "&amp;";
+    case "<":
+      return "&lt;";
+    case ">":
+      return "&gt;";
+    case '"':
+      return "&quot;";
+    default:
+      return str;
+  }
+};
+
+
+export function escapeXml (str) {
+  const reXmlSpecial = new RegExp('[&<>"]', "g");
+  if (reXmlSpecial.test(str)) {
+      return str.replace(reXmlSpecial, replaceUnsafeChar);
+  } else {
+      return str;
+  }
+}
+
 /** 当前位置前移，1个tab对应4个空格 */
 export function advanceOffset(line, offset, column, count, forColumns) {
   let char, spaceInTab = 0;

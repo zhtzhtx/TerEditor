@@ -29,6 +29,8 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
-    "is-hotkey": "^0.2.0"
+    "is-hotkey": "^0.2.0",
+    "less": "^4.1.3",
+    "less-loader": "^11.1.0"
   }
 }
